@@ -8,10 +8,6 @@ from src.database.query import update_product_from_public_data_query, create_pro
 
 from src.nutridata.get_nutri_data import GetNutriData as nd
 
-def clean_code(value):
-    #정규표현식 이용해서 product code 앞 P와 -삭제하고 int형으로 변환
-    return int(re.sub('[P-]','',value))
-
 
 #상품명 앞 카테고리 붙는거 삭제
 def clean_data(value):
@@ -25,9 +21,9 @@ def convert_to_date(value):
 
 # 유통업체를 brand column에 넣되, 유통업체가 '해당없음'이면 '제조사명'에 해당하는 값 넣기. 둘 다 없으면 '정보없음' 넣어주기
 def get_brand(data):
-    if data['유통업체명'] != '해당없음':  
+    if data.get('유통업체명') and data['제조사명'] != '해당없음':  
         return data['유통업체명']
-    elif data['유통업체명'] != '해당없음': 
+    elif data.get('제조사명'):
         return data['제조사명']
     else:
         return '정보없음'
@@ -50,7 +46,7 @@ def insert_sql_from_json(cutoff_date):
     cutoff_date = convert_to_date(cutoff_date)
 
     #dictionary에서 필요한 필드들만 빼서 tuple로 변환. for bulk update.
-    product_data = [(clean_code(data['식품코드']), clean_data(data['식품명']), get_brand(data), nd.set_category(data), data['식품대분류명'], data['식품중분류명'], data['식품소분류명'], 
+    product_data = [(nd.clean_code(data['식품코드']), clean_data(data['식품명']), get_brand(data), nd.set_category(data), data['식품대분류명'], data['식품중분류명'], data['식품소분류명'], 
                         nd.subtract_g(data['식품중량']), nd.subtract_g(data['1회 섭취참고량']), data['에너지(kcal)'], 
                         data['탄수화물(g)'], data['단백질(g)'], data['지방(g)'], data['나트륨(mg)'], 
                         data['콜레스테롤(mg)'], data['포화지방산(g)'], data['트랜스지방산(g)'], data['당류(g)']) 

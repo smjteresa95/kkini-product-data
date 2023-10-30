@@ -1,4 +1,5 @@
 import json
+import re #정규표현식을 쓰기 위한 Lib
 from src.config.db_config import DATA_PATH
 
 class GetNutriData:
@@ -9,7 +10,13 @@ class GetNutriData:
         with open(DATA_PATH, encoding="utf8") as f:
             json_data = json.load(f)
         return json_data["records"]
+    
 
+    @staticmethod
+    def clean_code(value):
+        #정규표현식 이용해서 product code 앞 P와 -삭제하고 int형으로 변환
+        return int(re.sub('[P-]','',value))
+    
 
     #데이터에 들어있는 문자 제거.
     @staticmethod
