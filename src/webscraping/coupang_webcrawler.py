@@ -1,6 +1,8 @@
 from ..util.crawling_util import create_driver
 from selenium.webdriver.common.by import By
 
+from selenium.common.exceptions import NoSuchElementException
+
 class Coupang:
 
     def __init__(self, product_to_search):
@@ -18,37 +20,55 @@ class Coupang:
 
         driver.get(url)
 
-        #상품명
-        name_elements = driver.find_elements(By.CLASS_NAME, "name")
-        name_list = [name_elements[i].text.replace(" ", "") for i in range(min(5, len(name_elements)))] #요소의 텍스트를 가져오고 공백을 제거한다. 
+        try:
+            #상품명
+            name_elements = driver.find_elements(By.CLASS_NAME, "name")
+            name_list = [name_elements[i].text.replace(" ", "") for i in range(min(5, len(name_elements)))] #요소의 텍스트를 가져오고 공백을 제거한다. 
 
-        product_name = self.product_to_search.replace(" ","")
-        contains_name = [] #인덱스와 일치하는 상품명 저장할 리스트
+            product_name = self.product_to_search.replace(" ","")
+            contains_name = [] #인덱스와 일치하는 상품명 저장할 리스트
 
-        for index, s in enumerate(name_list):
-            if product_name in s:
-                contains_name.append((index, s))
+            for index, s in enumerate(name_list):
+                if product_name in s:
+                    contains_name.append((index, s))
+            
+            # Check if we have any product names that matched
+            if not contains_name:
+                print("No products found matching the search criteria.")
+                return
 
-        index = contains_name[0][0] 
+            index = contains_name[0][0] 
 
-        #상품링크
-        link_elements = driver.find_elements(By.CLASS_NAME, "search-product-link")
-        product_link = link_elements[index].get_attribute('href') # 해당 index 요소의 'href'속성값을 가져온다.
-        print(product_link)
+            #상품링크
+            link_elements = driver.find_elements(By.CLASS_NAME, "search-product-link")
+            product_link = link_elements[index].get_attribute('href') # 해당 index 요소의 'href'속성값을 가져온다.
+            print(product_link)
 
-        #할인 전 금액
-        original_price_elements = driver.find_elements(By.CLASS_NAME, "base-price")
-        original_price = original_price_elements[index].text.replace(",","")
-        print(original_price)
+            #할인 전 금액
+            try:
+                original_price_elements = driver.find_elements(By.CLASS_NAME, "base-price")
+                original_price = int(original_price_elements[index].text.replace(",",""))
+                print(original_price)
+            except NoSuchElementException:
+                print("None")
 
-        #할인 후 금액
-        sales_price_elements = driver.find_elements(By.CLASS_NAME, "price-value")
-        sales_price = sales_price_elements[index].text.replace(",","")
-        print(sales_price)
+            #할인 후 금액
+            try:
+                sales_price_elements = driver.find_elements(By.CLASS_NAME, "price-value")
+                sales_price = int(sales_price_elements[index].text.replace(",",""))
+                print(sales_price)
+            except NoSuchElementException:
+                print("None")
 
-        #할인률
-        discount_rate_elements = driver.find_elements(By.CLASS_NAME, "instant-discount-rate")
-        discount_rate = discount_rate_elements[index].text.replace("%","")
-        print(discount_rate)
+            #할인률
+            try:
+                discount_rate_elements = driver.find_elements(By.CLASS_NAME, "instant-discount-rate")
+                discount_rate = int(discount_rate_elements[index].text.replace("%",""))
+                print(discount_rate)
+            except NoSuchElementException:
+                print("None")
+
+        except Exception as e:
+            print(f"검색결과가 없습니다: {e}")
 
         driver.quit()
