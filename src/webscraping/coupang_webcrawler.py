@@ -1,52 +1,54 @@
-from selenium import webdriver
-
+from ..util.crawling_util import create_driver
 from selenium.webdriver.common.by import By
 
-user_agent_value = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0"
-options = webdriver.FirefoxOptions()
-options.add_argument(f"user-agent={user_agent_value}")
+class Coupang:
 
-search_url = "https://www.coupang.com/np/search?component=&q="
-product_to_search = "굿프랜즈 푸짐한한끼왕교자"
-url = search_url + product_to_search
+    def __init__(self, product_to_search):
+        self.product_to_search = product_to_search
 
-driver = webdriver.Firefox(options=options)
-driver.get(url)
+    def coupang_webcrawler(self):
 
-#쿠키저장
-cookies = driver.get_cookies()
+        #TODO
+        #검색결과가 없을 때 어떻게 처리할지 로직 추가
 
-#상품명
-name_elements = driver.find_elements(By.CLASS_NAME, "name")
-name_list = [name_elements[i].text.replace(" ", "") for i in [0, 1, 2, 3, 4]] #요소의 텍스트를 가져오고 공백을 제거한다. 
+        driver = create_driver()
 
-product_name = product_to_search.replace(" ","")
-contains_name = [] #인덱스와 일치하는 상품명 저장할 리스트
+        search_url = "https://www.coupang.com/np/search?component=&q="
+        url = search_url + self.product_to_search
 
-for index, s in enumerate(name_list):
-    if product_name in s:
-        contains_name.append((index, s))
+        driver.get(url)
 
-index = contains_name[0][0] 
+        #상품명
+        name_elements = driver.find_elements(By.CLASS_NAME, "name")
+        name_list = [name_elements[i].text.replace(" ", "") for i in range(min(5, len(name_elements)))] #요소의 텍스트를 가져오고 공백을 제거한다. 
 
-#상품링크
-link_elements = driver.find_elements(By.CLASS_NAME, "search-product-link")
-product_link = link_elements[index].get_attribute('href') # 해당 index 요소의 'href'속성값을 가져온다.
-print(product_link)
+        product_name = self.product_to_search.replace(" ","")
+        contains_name = [] #인덱스와 일치하는 상품명 저장할 리스트
 
-#할인 전 금액
-sales_price_elements = driver.find_elements(By.CLASS_NAME, "base-price")
-sales_price = sales_price_elements[index].text.replace(",","")
-print(sales_price)
+        for index, s in enumerate(name_list):
+            if product_name in s:
+                contains_name.append((index, s))
 
-#할인 후 금액
-sales_price_elements = driver.find_elements(By.CLASS_NAME, "price-value")
-sales_price = sales_price_elements[index].text.replace(",","")
-print(sales_price)
+        index = contains_name[0][0] 
 
-#할인률
-discount_rate_elements = driver.find_elements(By.CLASS_NAME, "instant-discount-rate")
-discount_rate = discount_rate_elements[index].text.replace("%","")
-print(discount_rate)
+        #상품링크
+        link_elements = driver.find_elements(By.CLASS_NAME, "search-product-link")
+        product_link = link_elements[index].get_attribute('href') # 해당 index 요소의 'href'속성값을 가져온다.
+        print(product_link)
 
-driver.quit()
+        #할인 전 금액
+        original_price_elements = driver.find_elements(By.CLASS_NAME, "base-price")
+        original_price = original_price_elements[index].text.replace(",","")
+        print(original_price)
+
+        #할인 후 금액
+        sales_price_elements = driver.find_elements(By.CLASS_NAME, "price-value")
+        sales_price = sales_price_elements[index].text.replace(",","")
+        print(sales_price)
+
+        #할인률
+        discount_rate_elements = driver.find_elements(By.CLASS_NAME, "instant-discount-rate")
+        discount_rate = discount_rate_elements[index].text.replace("%","")
+        print(discount_rate)
+
+        driver.quit()
