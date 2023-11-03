@@ -7,19 +7,6 @@ from src.database.query import update_filter_query, create_filter_table_query
 
 class SaveNutriFilter:
 
-    # def __init__(self, product_code, category, kcal, carb, protein, fat, sodium, cholesterol, sat_fat, trans_fat, sugar):
-    #     self.product_code = product_code,
-    #     self.category = category
-    #     self.kcal = kcal
-    #     self.carb = carb
-    #     self.protein = protein
-    #     self.fat = fat
-    #     self.sodium = sodium
-    #     self.cholesterol = cholesterol
-    #     self.sat_fat = sat_fat
-    #     self.trans_fat = trans_fat
-    #     self.sugar = sugar
-
     def get_filter_list(self):
 
         nutri_data = nd.fetch_json_data_from_file()
@@ -28,6 +15,7 @@ class SaveNutriFilter:
 
         for data in nutri_data:
             product_code = nd.clean_code(data['식품코드'])
+            product_name = nd.clean_name(data['식품명'])
             category = nd.set_category(data)
 
             filter_instance = nf(category, float(data['에너지(kcal)']), float(data['탄수화물(g)']), float(data['단백질(g)']), 
@@ -35,7 +23,7 @@ class SaveNutriFilter:
                                  float(data['포화지방산(g)']), float(data['트랜스지방산(g)']), float(data['당류(g)']))
             
             nutri_filter = filter_instance.get_nutri_filter()
-            combined_filter = [product_code, category] + nutri_filter
+            combined_filter = [product_code, product_name, category] + nutri_filter
 
             all_filter.append(combined_filter)
         
