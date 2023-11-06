@@ -1,8 +1,8 @@
-from src.nutridata.get_nutri_data import GetNutriData as nd
+from src.product.get_nutri_data import GetNutriData as nd
 from src.productfilter.cal_nutri_filter import CalNutriFilter as nf
 
 import pymysql
-from src.database.db_util import get_db_connection
+from src.util.db_util import get_db_connection
 from src.database.query import update_filter_query, create_filter_table_query
 
 class SaveNutriFilter:

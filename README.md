@@ -13,6 +13,12 @@ DB_CONFIG = {
 DATA_PATH = 'src\\database\\data\\nutridata.json'
 ```
 
+#PyMySQL이 MySQL 8.0 이후의 새로운 인증 방법인 caching_sha2_password를 사용.
+```
+pip install cryptography
+
+```
+
 ## When using API to fetch data
 공공데이터 api로 부터 받아온 값을 DB에 저장한다. 
 HTTP 요청을 통해 API로부터 데이터를 받아오는데 python 에서는 requests library를 사용해서 API요청을 처리한다. 

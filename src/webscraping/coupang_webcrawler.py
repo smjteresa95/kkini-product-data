@@ -10,9 +10,6 @@ class Coupang:
 
     def coupang_webcrawler(self):
 
-        #TODO
-        #검색결과가 없을 때 어떻게 처리할지 로직 추가
-
         driver = create_driver()
 
         search_url = "https://www.coupang.com/np/search?component=&q="
@@ -21,6 +18,9 @@ class Coupang:
         driver.get(url)
 
         try:
+
+            product_info_list = []
+
             #상품명
             name_elements = driver.find_elements(By.CLASS_NAME, "name")
             name_list = [name_elements[i].text.replace(" ", "") for i in range(min(5, len(name_elements)))] #요소의 텍스트를 가져오고 공백을 제거한다. 
@@ -42,30 +42,37 @@ class Coupang:
             #상품링크
             link_elements = driver.find_elements(By.CLASS_NAME, "search-product-link")
             product_link = link_elements[index].get_attribute('href') # 해당 index 요소의 'href'속성값을 가져온다.
+            product_info_list.append(product_link)
             print(product_link)
 
             #할인 전 금액
             try:
                 original_price_elements = driver.find_elements(By.CLASS_NAME, "base-price")
                 original_price = int(original_price_elements[index].text.replace(",",""))
+                product_info_list.append(original_price)
                 print(original_price)
             except NoSuchElementException:
+                product_info_list.append(None)
                 print("None")
 
             #할인 후 금액
             try:
                 sales_price_elements = driver.find_elements(By.CLASS_NAME, "price-value")
                 sales_price = int(sales_price_elements[index].text.replace(",",""))
+                product_info_list.append(sales_price)
                 print(sales_price)
             except NoSuchElementException:
+                product_info_list.append(None)
                 print("None")
 
             #할인률
             try:
                 discount_rate_elements = driver.find_elements(By.CLASS_NAME, "instant-discount-rate")
                 discount_rate = int(discount_rate_elements[index].text.replace("%",""))
+                product_info_list.append(discount_rate)
                 print(discount_rate)
             except NoSuchElementException:
+                product_info_list.append(None)
                 print("None")
 
         except Exception as e:
