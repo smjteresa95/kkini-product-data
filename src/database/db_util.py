@@ -7,5 +7,5 @@ def get_db_connection():
         user=DB_CONFIG['user'],
         password=DB_CONFIG['password'],
         database=DB_CONFIG['database'],
-        charset='utf8'
+        charset='utf8mb4'
     )
