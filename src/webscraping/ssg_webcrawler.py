@@ -2,9 +2,6 @@ import re
 from ..util.crawling_util import create_driver
 
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
 from selenium.webdriver.common.by import By
 
 from ..webscraping.productinfo import ProductInfo
@@ -43,8 +40,6 @@ class Ssg:
                 if product_name in s:
                     contains_name.append((index, s))
                     
-
-            # Check if we have any product names that matched
             # 검색결과가 없는 경우
             if not contains_name:
                 print("No products found matching the search criteria.")
@@ -64,9 +59,7 @@ class Ssg:
             #제품링크
             link_xpath = f"//ul/li[{index}]/div[1]/div[2]/a"
             link_element = driver.find_element(By.XPATH, link_xpath)
-            product_link = link_element.get_attribute('href') # 해당 index 요소의 'href'속성값을 가져온다.
-            # product_info_list.append(product_link)
-            print(product_link)
+            product_link = link_element.get_attribute('href') # 해당 index 요소의 'href'속성값을 가져온다.            print(product_link)
 
             #제품상세페이지로 이동 
             driver.get(product_link)
@@ -74,7 +67,6 @@ class Ssg:
             #제품이미지
             img_element = driver.find_element(By.ID, 'mainImg')
             product_img = img_element.get_attribute('src')
-            # product_info_list.append(product_img)
             print(product_img)
 
             #할인 전 금액
@@ -82,10 +74,8 @@ class Ssg:
                 original_price_xpath = "//span[contains(@class, 'cdtl_old_price')]/em[contains(@class, 'ssg_price')]"
                 original_price_element = driver.find_element(By.XPATH, original_price_xpath)
                 original_price = int(re.sub('[,원]','', original_price_element.text))
-                # product_info_list.append(original_price)
                 print(original_price)
             except NoSuchElementException:
-                # product_info_list.append(None)
                 print("None")
 
             #할인 후 금액
@@ -93,10 +83,8 @@ class Ssg:
                 sales_price_xpath = "//span[contains(@class, 'cdtl_new_price') and contains(@class, 'notranslate')]/em[contains(@class, 'ssg_price')]"
                 sales_price_element = driver.find_element(By.XPATH, sales_price_xpath)
                 sales_price = int(sales_price_element.text.replace(',','').strip())
-                # product_info_list.append(sales_price)
                 print(sales_price)
             except NoSuchElementException:
-                # product_info_list.append(None)
                 print("None")
 
             #할인률
@@ -104,10 +92,8 @@ class Ssg:
                 discount_rate_xpath = "//span[contains(@class, 'cdtl_new_price') and contains(@class, 'notranslate')]/em[contains(@class, 'ssg_percent')]"
                 discount_rate_element = driver.find_element(By.XPATH, discount_rate_xpath)
                 discount_rate = int(discount_rate_element.text.replace('%','').strip())
-                # product_info_list.append(discount_rate)
                 print(discount_rate)
             except NoSuchElementException:
-                # product_info_list.append(None)
                 print("None")
             
             # return product_info_list
