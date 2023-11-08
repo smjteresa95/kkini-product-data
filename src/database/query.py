@@ -56,13 +56,15 @@ update_product_from_public_data_query = """
         cholesterol = VALUES(Cholesterol),
         saturated_fat = VALUES(saturated_fat),
         trans_fat = VALUES(trans_fat),
-        sugar = VALUES(sugar)   
+        sugar = VALUES(sugar),
+        is_green = VALUES(is_green),
+        nut_score = VALUES(nut_score)  
 """
 
 #ProductFilter table 
 create_filter_table_query = """
     CREATE TABLE IF NOT EXISTS product_filter(
-        product_id BIGINT NOT NULL,
+        product_id BIGINT NOT NULL UNIQUE,
         product_name VARCHAR(255),
         category VARCHAR(255),
         is_low_calorie BOOLEAN NOT NULL DEFAULT 0,
