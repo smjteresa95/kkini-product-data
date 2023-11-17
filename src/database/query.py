@@ -58,7 +58,7 @@ update_product_from_public_data_query = """
         trans_fat = VALUES(trans_fat),
         sugar = VALUES(sugar),
         is_green = VALUES(is_green),
-        nut_score = VALUES(nut_score)  
+        nut_score = VALUES(nut_score)
 """
 
 #ProductFilter table 
@@ -133,4 +133,9 @@ update_price_query = """
         updated_at = CURRENT_TIMESTAMP
 """
 
+update_product_image_url = """
+    UPDATE product
+    SET image = %s, updated_at = CURRENT_TIMESTAMP
+    WHERE product_id = %s;
+"""
 

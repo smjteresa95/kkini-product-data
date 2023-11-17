@@ -84,7 +84,6 @@ class Gsshop():
             #할인 후 금액
             try:
                 sales_price_xpath = "//div[@class='price-definition-base']//span[@class='price-definition-ins']/ins/strong"
-                sales_price_css = "div.price_info > div.price_big > div > div.price-definition-base > span.price-definition-ins > ins > strong"
                 sales_price_element = driver.find_element(By.XPATH, sales_price_xpath)
                 sales_price = int(sales_price_element.text.replace(',', ''))
                 print(sales_price)

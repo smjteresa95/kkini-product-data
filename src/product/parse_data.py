@@ -1,16 +1,19 @@
 #json파일에서 필요한 데이터들을 DB의 product 테이블에 저장
 import pymysql
 
-from src.database.db_util import get_db_connection
+from src.util.db_util import get_db_connection
 from src.database.query import update_product_from_public_data_query, create_product_table_query
 
-from src.nutridata.get_nutri_data import GetNutriData as nd
+from src.product.get_nutri_data import GetNutriData as nd
 from src.productfilter.cal_nutri_filter import CalNutriFilter as nf
+
+from src.product.save_product_image import SaveProductImage 
 
 class SaveProduct:
 
+    @classmethod
     #cutoff_date 이후의 데이터만 DB에 저장. 
-    def insert_sql_from_json(cutoff_date):
+    def insert_sql_from_json(cls, cutoff_date):
 
         #공공데이터 가지고 오기
         data_list = nd.fetch_json_data_from_file()
@@ -52,6 +55,15 @@ class SaveProduct:
             is_green = cal_nutri_filter_instance.get_is_green()
 
             nut_score = cal_nutri_filter_instance.get_nut_score()
+
+            # product_name = data['식품명']
+
+            #추후 삭제해야함. 크롤링 해온 이미지 url을 직접 DB에 넣는다. 
+            # public_url = SaveProductImage.get_image_url(product_name)
+
+            #크롤링 해온 이미지 S3에 업로드 하고 그 url 가지고 오기. 
+            # image_url = SaveProductImage.get_image_url(product_name)
+            # public_url = SaveProductImage.image_s3_uploader(product_name)
 
             if nd.convert_to_date(data['데이터기준일자']) >= cutoff_date:
                 product_data.append([nd.clean_code(data['식품코드']), nd.clean_name(data['식품명']), nd.get_brand(data), category, data['식품대분류명'], data['식품중분류명'], data['식품소분류명'], 

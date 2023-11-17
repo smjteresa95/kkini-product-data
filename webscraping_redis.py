@@ -1,17 +1,9 @@
 from src.webscraping.coupang_webcrawler import Coupang
 from src.webscraping.ssg_webcrawler import Ssg
 
-import pymysql
-from src.util.db_util import get_db_connection
-from src.database.query import create_product_info_table_query, update_product_info_query
-
 from src.product.get_nutri_data import GetNutriData as nd
 
 data_list = nd.fetch_json_data_from_file()
-
-conn = get_db_connection()
-cur = conn.cursor()
-cur.execute(create_product_info_table_query)
 
 ssg_list = []
 
@@ -32,19 +24,3 @@ for data in data_list:
                         getattr(product_info, 'discount_rate', None)
                         )
     ssg_list.append(ssg_product_info)
-
-try:
-    cur.executemany(update_product_info_query, ssg_list)
-    conn.commit()
-    print("Successfully inserted records to database")
-
-except pymysql.Error as error:
-    print("Failed to insert records to database: {}".format(error))
-
-
-
-    # coupang_instance = Coupang(product_to_search)
-    # coupang_instance.coupang_webcrawler()
-
-conn.close()
-    # print("MySQL connection is closed")

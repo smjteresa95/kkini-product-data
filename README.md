@@ -39,3 +39,22 @@ pip install beautifulsoup4
 4. 개발자 도구의 네트워크 탭에서, 첫 번째 요청 (보통 웹 페이지의 URL과 일치)을 클릭합니다.<br>
 5. 오른쪽의 상세 패널에서 "헤더" 탭을 선택합니다.<br>
 6. "요청 헤더" 섹션을 찾아보면 User-Agent라는 항목 아래에 현재 사용 중인 User-Agent 문자열을 볼 수 있습니다.
+
+## redis
+NoSQL(비관계형 데이터베이스)의 한 종류로서 key-value 기반의 인메모리 저장소. RDBMS의 요청부하를 줄이기 위해 인메모리 캐시용도로 사용하기 위해 redis 적용하기로 한다. 
+python에서 redis를 사용하기 위해 라이브러리를 설치한다.
+```
+pip install redis 
+```
+서버에 redis를 설치해서 데이터 조작이 가능하다.  
+
+## Object storage 
+이미지를 S3에 저장하는 작업을 하기에 앞서 AWS SDK for Python 인 boto3 라이브러리를 설치한다
+```
+python -m pip install boto3
+```
+
+## is not accessedPylance 에러
+Import "boto3" could not be resolved Pylance reportMissingImports
+
+콘솔창에 pip 새 버전이 나왔다고 자꾸 떴다. Ctrl+Shift+P 키를 눌러 "Python: Select Interpreter"를 검색했더니 맞는 버전의 python interpreter 를 선택할 수 있었다. 

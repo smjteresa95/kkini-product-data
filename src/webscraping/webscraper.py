@@ -14,6 +14,18 @@ from src.product.get_nutri_data import GetNutriData as nd
 
 class WebScraper(BaseCrawler):
 
+    @staticmethod
+    def get_image_from_naver(product_to_search):
+
+        #네이버쇼핑에서 이미지만 얻어오기
+        naver_instance = Naver(product_to_search)
+        image_url = naver_instance.webcrawler()
+
+        if image_url:
+            return image_url
+        else:
+            return None
+
     def get_data_from_site():
 
         data_list = nd.fetch_json_data_from_file()
@@ -33,23 +45,23 @@ class WebScraper(BaseCrawler):
             product_to_search = nd.clean_name(data['식품명'])
             
             #네이버쇼핑에서 이미지만 얻어오기
-            naver_instance = Naver(product_id, product_to_search)
+            naver_instance = Naver(product_to_search)
             img_tuple = (product_id, naver_instance.webcrawler())
-            print(img_tuple)
+            print(naver_instance.webcrawler())
             img_list.append(img_tuple)
 
-            #가격, 이미지 데이터 크롤링
-            crawler = BaseCrawler(product_id, product_to_search)
+            # #가격, 이미지 데이터 크롤링
+            # crawler = BaseCrawler(product_id, product_to_search)
 
-            #부모 클래스에서 정의한 메서드 
-            gs_product_info_tuple = crawler.get_product_info(Gsshop, product_id, product_to_search)
-            gs_list.append(gs_product_info_tuple)
+            # #부모 클래스에서 정의한 메서드 
+            # gs_product_info_tuple = crawler.get_product_info(Gsshop, product_id, product_to_search)
+            # gs_list.append(gs_product_info_tuple)
 
-            coupang_product_info_tuple = crawler.get_product_info(Coupang, product_id, product_to_search)
-            coupang_list.append(coupang_product_info_tuple)
+            # coupang_product_info_tuple = crawler.get_product_info(Coupang, product_id, product_to_search)
+            # coupang_list.append(coupang_product_info_tuple)
 
-            ssg_product_info_tuple = crawler.get_product_info(Ssg, product_id, product_to_search)
-            ssg_list.append(ssg_product_info_tuple)
+            # ssg_product_info_tuple = crawler.get_product_info(Ssg, product_id, product_to_search)
+            # ssg_list.append(ssg_product_info_tuple)
 
 
         # try:
