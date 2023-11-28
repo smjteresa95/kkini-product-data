@@ -1,3 +1,4 @@
+#이미지 S3에 저장 테스트 파일(삭제해도 무방)
 from src.s3.image_saver import ImageSaver
 
 image_url = 'https://shopping-phinf.pstatic.net/main_5716183/5716183724.20210713112326.jpg?type=f640'
