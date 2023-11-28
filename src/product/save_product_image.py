@@ -65,7 +65,7 @@ class SaveProductImage:
             cur = conn.cursor()
 
             try:
-
+                #지정한 batch size 만큼의 상품을 검색 후 
                 start_index = batch * BATCH_SIZE
                 end_index = min((batch + 1) * BATCH_SIZE, len(data_list))
 

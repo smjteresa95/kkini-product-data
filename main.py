@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # filter = nf()
     # filter.fill_filter_column()
 
-    #이미지 url 저장
+    #네이버에서 크롤링한 이미지 S3에 저장 후 DB에 public url 저장
     gi.get_image_upload_to_s3()
 
 

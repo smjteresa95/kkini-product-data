@@ -1,3 +1,4 @@
+#redis 적용 테스트 파일(진행중)
 from src.webscraping.coupang_webcrawler import Coupang
 from src.webscraping.ssg_webcrawler import Ssg
 
