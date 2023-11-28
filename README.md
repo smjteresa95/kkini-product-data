@@ -19,6 +19,30 @@ pip install cryptography
 
 ```
 
+s3_config.py file is also hidden by gitignore file. 
+
+```
+#Naver Cloud
+S3_CONFIG = {
+    'service_name' : 's3',
+    'access_key': '',
+    'secret_key': '',
+    'region_name': 'kr-standard',
+    'endpoint_url': 'https://kr.object.ncloudstorage.com'
+}
+```
+
+```
+#AWS
+# S3_CONFIG = {
+#     'service_name' : 's3',
+#     'access_key' : '',
+#     'secret_key' : '',
+#     'region_name': 'ap-northeast-2'
+# }
+```
+
+
 ## When using API to fetch data
 공공데이터 api로 부터 받아온 값을 DB에 저장한다. 
 HTTP 요청을 통해 API로부터 데이터를 받아오는데 python 에서는 requests library를 사용해서 API요청을 처리한다. 
