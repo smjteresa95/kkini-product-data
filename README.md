@@ -1,13 +1,14 @@
 # Kkini Project를 위한 상품 데이터 정보 크롤링 
 1. **product 테이블** [src/product/parse_data.py]     
 json 파일에 담겨있는 5만건의 식품 데이터를 parsing 하는 동시에 is_green, nut_score 계산하여 DB에 Bulk insert.   
->>* 식품데이터가 담긴 json 파일위치는 src/database/data/nutridata.json 에 있다. testdata.json 은 테스트 할 때 쓴 파일.
+> 식품데이터가 담긴 json 파일위치는 src/database/data/nutridata.json 에 있다. testdata.json 은 테스트 할 때 쓴 파일.
 2. **product_filter테이블** [src/productfilter/save_nutri_filter.py]     
 해당 상품이 저칼로리, 저지방, 고단백인지 등에 대한 계산을 하여 DB에 boolean 값으로 저장한다.
-3. **product 테이블**     
-이미지 얻어와서 S3에 저장 [src/product/save_product_image/py] 
-4. **product_info 테이블**      
+3. **product 테이블** [src/product/save_product_image.py]     
+이미지 얻어와서 S3에 저장 
+4. **product_info 테이블** [src/webscraping/webscraper.py]     
 상품의 가격, 이미지 등을 크롤링해서 가지고 온다. 
+> productinfo.py 파일의 ProductInfo dataclass는 DTO 처럼 데이터를 저장/전송하는데 사용한다. 
 5. **DB 쿼리문** [src/data/query.py]          
 
 ## Setup
