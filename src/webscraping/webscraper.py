@@ -9,9 +9,10 @@ from src.webscraping.naver_webcrawler import Naver
 import pymysql
 import os
 from src.util.db_util import get_db_connection
-from src.database.query import create_product_info_table_query, update_product_info_query
+from src.database.query import create_product_info_table_query, update_product_info_query, update_product_image_url
 
 from src.product.get_nutri_data import GetNutriData as nd
+from src.product.save_product_image import SaveProductImage as si
 
 class WebScraper(BaseCrawler):
 
@@ -46,6 +47,7 @@ class WebScraper(BaseCrawler):
             return image_url
         else:
             return None
+        
 
     @classmethod    
     def get_data_from_site(cls):
@@ -79,6 +81,9 @@ class WebScraper(BaseCrawler):
                 coupang_list = []
                 gs_list = []
 
+                raw_img_list = []
+                img_list = []
+
                 for data in data_list[start_index:end_index]:
 
                     product_id = int(nd.clean_code(data['식품코드']))
@@ -98,9 +103,38 @@ class WebScraper(BaseCrawler):
                     ssg_list.append(ssg_product_info_tuple)
 
 
+
+                    ####### 리펙토링 해야 하는 부분 #######
+
+                    # 크롤링 해서 가지고 온 image_url 
+                    raw_img_list.append(gs_product_info_tuple[3])
+                    raw_img_list.append(ssg_product_info_tuple[3])
+
+                    # 이미지가 존재하면 하나로 추리고, 없으면 None
+                    selected_image = next((
+                        img for img in raw_img_list if img is not None
+                    ), None)
+
+                     #이미지가 존재하는 경우, 이미지 Object storage에 저장하고 public url 얻어오기.
+                    if selected_image:
+                        product_image = si.image_s3_uploader(product_to_search, selected_image)
+                    else:
+                        product_image = None
+
+                    image_tuple = (product_image, product_id)
+                    img_list.append(image_tuple)
+
+
+
+                # 크롤링 해서 가지고 온 상품 정보 product_info 에 bulk insert
                 cur.executemany(update_product_info_query, ssg_list)
                 cur.executemany(update_product_info_query, coupang_list)
                 cur.executemany(update_product_info_query, gs_list)
+
+
+                # 이미지 product에 bulk insert/update
+                cur.executemany(update_product_image_url, img_list)
+
 
                 conn.commit()
                 print(f"Current batch {batch}: Successfully inserted records to database")
