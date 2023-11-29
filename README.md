@@ -8,11 +8,15 @@ json 파일에 담겨있는 5만건의 식품 데이터를 parsing 하는 동시
 2. **product_filter테이블** [src/productfilter/save_nutri_filter.py]     
 해당 상품이 저칼로리, 저지방, 고단백인지 등에 대한 계산을 하여 DB에 boolean 값으로 저장한다.
 3. **product 테이블** [src/product/save_product_image.py]     
-이미지 얻어와서 S3에 저장 
+- 네이버 쇼핑에서 이미지 얻어와서 S3에 저장 후, public url을 product 테이블에 저장
+- (진행중인 작업) product_info 에 있는 이미지를 S3에 저장 후, public url을 product 테이블에 저장
 4. **product_info 테이블** [src/webscraping/webscraper.py]     
-3개의 사이트에서 상품의 가격, 이미지 등을 크롤링해서 가지고 온다. 
+3개의 사이트에서 상품의 가격, 이미지 등을 크롤링해서 가지고 온다. 이미 데이터가 존재하는 경우 값을 업데이트 한다. 
 > productinfo.py 파일의 ProductInfo dataclass는 DTO 처럼 데이터를 저장/전송하는데 사용한다. 
-5. **DB 쿼리문** [src/data/query.py]          
+5. **DB 쿼리문** [src/data/query.py]    
+6. **크롤링 서버** [src/logs/last_batch.txt]
+Batch size를 정해 특정 갯수의 상품정보를 각가의 웹사이트에서 검색하여 DB에 Bulk insert를 하는데, 상품의 갯수가 많기 때문에 마지막 batch size를 저장했다가 중단된 서버를 다시 돌릴 때 마지막 batch size부터 할 수 있게끔 했다. 
+
 
 ## Setup
 
