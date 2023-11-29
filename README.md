@@ -1,6 +1,6 @@
 # Kkini Project를 위한 상품 데이터 정보 저장 및 크롤링 
 
-### 기능설명
+## 기능설명
 
 1. **product 테이블** [src/product/parse_data.py]     
 json 파일에 담겨있는 5만건의 식품 데이터를 parsing 하는 동시에 is_green, nut_score 계산하여 DB에 Bulk insert.   
@@ -108,3 +108,7 @@ pip install redis
 Import "boto3" could not be resolved Pylance reportMissingImports
 
 콘솔창에 pip 새 버전이 나왔다고 자꾸 떴다. Ctrl+Shift+P 키를 눌러 "Python: Select Interpreter"를 검색했더니 맞는 버전의 python interpreter 를 선택할 수 있었다. 
+
+
+## 시작하기
+main.py 파일 실행하면 된다. 
