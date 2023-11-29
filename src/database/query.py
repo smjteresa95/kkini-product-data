@@ -126,6 +126,6 @@ update_product_info_query = """
 update_product_image_url = """
     UPDATE product
     SET image = %s, updated_at = CURRENT_TIMESTAMP
-    WHERE product_id = %s;
+    WHERE product_id = %s AND image IS NULL;
 """
 
