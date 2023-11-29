@@ -1,14 +1,29 @@
 from src.webscraping.naver_webcrawler import Naver
 from src.product.get_nutri_data import GetNutriData as nd
 from src.s3.image_saver import ImageSaver
-from src.webscraping.webscraper import WebScraper
 
-import pymysql
 from src.util.db_util import get_db_connection
 from src.database.query import update_product_image_url
 
 
 class SaveProductImage:
+
+    # product_info 테이블(크롤링 한 상품 데이터 담는 테이블)에서 가지고 온 image url을 
+    # object storage에 저장하고, public url 만들어 반환하는 메서드
+    @staticmethod
+    def image_s3_uploader(product_name, image_url):
+            
+        #크롤링 한 이미지 url로 객체생성
+        image_content = ImageSaver.download_image(image_url)
+    
+        #객체를 object storage 에 저장
+        if image_content:
+            ImageSaver.upload_to_s3(product_name, image_content)
+            print('image successfully updated to the object storage')
+
+        #url 얻어오기
+        return ImageSaver.get_public_url(product_name)
+
 
     #네이버 쇼핑에서 크롤링 한 이미지 url을 object storage에 저장하고, public url 만들어 반환
     @classmethod
@@ -38,7 +53,7 @@ class SaveProductImage:
 
     # naver_image_s3_uploader() 메서드를 전체 상품에 적용.
     @classmethod
-    def get_image_upload_to_s3(cls):
+    def get_naver_image_upload_to_s3(cls):
         
         data_list = nd.fetch_json_data_from_file()
         BATCH_SIZE = 10
