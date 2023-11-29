@@ -1,2 +1,2 @@
-db_config.py
-s3_config.py
+src/config/db_config.py
+src/config/s3_config.py
