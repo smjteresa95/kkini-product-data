@@ -10,23 +10,9 @@ from src.database.query import update_product_image_url
 
 class SaveProductImage:
 
-    # #product_name으로 검색해서 사진 url 가지고오기.
-    # @staticmethod
-    # def get_image_from_naver(product_to_search):
-
-    #     #네이버쇼핑에서 이미지만 얻어오기
-    #     naver_instance = Naver(product_to_search)
-    #     image_url = naver_instance.webcrawler()
-
-    #     if image_url:
-    #         return image_url
-    #     else:
-    #         return None
-            
-
-    #크롤링 한 이미지 url을 object storage에 저장하고, public url 만들어 반환
+    #네이버 쇼핑에서 크롤링 한 이미지 url을 object storage에 저장하고, public url 만들어 반환
     @classmethod
-    def image_s3_uploader(cls, file_name):
+    def naver_image_s3_uploader(cls, file_name):
 
         #네이버에서 상품이미지를 찾을 수 있는 경우
         #파일이름은 상품명으로 한다.
@@ -50,7 +36,7 @@ class SaveProductImage:
         else:
             return None
 
-
+    # naver_image_s3_uploader() 메서드를 전체 상품에 적용.
     @classmethod
     def get_image_upload_to_s3(cls):
         
@@ -77,7 +63,7 @@ class SaveProductImage:
 
                     try:
                         #이미지 object storage에 업로드,
-                        public_url = cls.image_s3_uploader(product_name)
+                        public_url = cls.naver_image_s3_uploader(product_name)
                     except Exception as e:
                         print(f"이미지 object storage에 업로드: {e}")
 
