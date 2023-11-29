@@ -7,12 +7,33 @@ from src.webscraping.gsshop_webcrawler import Gsshop
 from src.webscraping.naver_webcrawler import Naver
 
 import pymysql
+import os
 from src.util.db_util import get_db_connection
 from src.database.query import create_product_info_table_query, update_product_info_query
 
 from src.product.get_nutri_data import GetNutriData as nd
 
 class WebScraper(BaseCrawler):
+
+    last_batch_file = 'src/logs/last_batch.txt'
+
+
+    #크롤링 서버 돌아가다가 중단 되어도 마지막 작업 했던 구간부터 이어서 돌릴 수 있게끔 파일시스템에 마지막 batch_size 저장.
+    @classmethod
+    def save_last_batch_index(cls, batch_index):
+        with open(cls.last_batch_file, 'w') as file:
+            file.write(str(batch_index))
+
+    @classmethod
+    def get_last_batch_index(cls):
+        if os.path.exists(cls.last_batch_file):
+            with open(cls.last_batch_file, 'r') as file:
+                value = file.read().strip()
+                if value: # 비어있지 않은 경우
+                    return int(value) 
+                else: 0
+        return 0
+            
 
     @staticmethod
     def get_image_from_naver(product_to_search):
@@ -26,7 +47,8 @@ class WebScraper(BaseCrawler):
         else:
             return None
 
-    def get_data_from_site():
+    @classmethod    
+    def get_data_from_site(cls):
 
         data_list = nd.fetch_json_data_from_file()
         BATCH_SIZE = 5
@@ -35,7 +57,11 @@ class WebScraper(BaseCrawler):
         # 사실상 데이터의 총 갯수가 5만개이므로 BATCH_SIZE가 10인 경우 total_batches 는 5천이다. 
         total_batches = len(data_list) // BATCH_SIZE + (1 if len(data_list) % BATCH_SIZE >0 else 0)
 
-        for batch in range(total_batches):
+        #마지막 batch_size 저장, 서버 돌릴 때 작업 이어서 할 수 있게 하기
+        last_batch = cls.get_last_batch_index()
+
+        # for batch in range(total_batches):
+        for batch in range(last_batch, total_batches):
 
             conn = get_db_connection()
             cur = conn.cursor()
@@ -84,6 +110,9 @@ class WebScraper(BaseCrawler):
                 conn.rollback()
             
             finally:
+                # 성공적으로 commit 된 경우에만 마지막 batch 저장
+                cls.save_last_batch_index(batch)
+
                 cur.close
                 conn.close()
                 print("MySQL connection is closed")
