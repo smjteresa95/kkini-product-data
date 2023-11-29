@@ -20,46 +20,36 @@ Batch size를 정해 특정 갯수의 상품정보를 각가의 웹사이트에�
 
 ## Setup
 
-**db_config.py** file is hidden by gitignore file. Need  to add db_config.py file under src/config directory.
-```
-#딕셔너리 형식으로 DB 설정값 저장 
-DB_CONFIG = {
-    'host': '',
-    'user': '',
-    'password': '',
-    'database': ''
-}
+<img src="src/util/image/package.png>
 
-#공공데이터 json 파일경로
-DATA_PATH = 'src\\database\\data\\nutridata.json'
+**.env 파일**
+환경변수 설정을 위한 .env 파일을 생성해서 값을 넣어줘야 한다. 
+```
+HOST=
+USER=
+PASSWORD=
+DATABASE=t
+
+#Naver Cloud
+SERVICE_NAME=s3
+ACCESS_KEY=
+SECRET_KEY=
+REGION_NAME=kr-standard
+ENDPOINT_URL=https://kr.object.ncloudstorage.com
+
+BUCKET_NAME=kkini-image-bucket
+FOLDER_NAME=product-image
+
+
+DATA_PATH=src/database/data/nutridata.json
+
+USER_AGENT=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0
+
 ```
 
 #PyMySQL이 MySQL 8.0 이후의 새로운 인증 방법인 caching_sha2_password를 사용.
 ```
 pip install cryptography
-```
-
-**s3_config.py** file is also hidden by gitignore file. 
-
-```
-#Naver Cloud
-S3_CONFIG = {
-    'service_name' : 's3',
-    'access_key': '',
-    'secret_key': '',
-    'region_name': 'kr-standard',
-    'endpoint_url': 'https://kr.object.ncloudstorage.com'
-}
-```
-
-```
-#AWS
-# S3_CONFIG = {
-#     'service_name' : 's3',
-#     'access_key' : '',
-#     'secret_key' : '',
-#     'region_name': 'ap-northeast-2'
-# }
 ```
 
 **selenium library**
