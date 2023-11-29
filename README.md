@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Kkini Project를 위한 상품 데이터 정보 저장 및 크롤링 
+=======
+# Kkini Project를 위한 상품 데이터 정보 크롤링 
+>>>>>>> 89f83c8029b4375e0d8e398bcb1755cd5b18f595
 ### 기능설명
 
 1. **product 테이블** [src/product/parse_data.py]     
