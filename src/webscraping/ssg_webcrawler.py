@@ -12,7 +12,7 @@ class Ssg:
         self.product_id = product_id
         self.product_to_search = product_to_search
 
-    def ssg_crawler(self):
+    def webcrawler(self):
         driver = create_driver()
 
         search_url = 'https://www.ssg.com/search.ssg?target=all&query='

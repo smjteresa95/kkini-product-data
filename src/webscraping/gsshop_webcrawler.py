@@ -104,7 +104,7 @@ class Gsshop():
             return ProductInfo(product_id = product_id, 
                                 site = site, 
                                 product_link = product_link, 
-                                product_img = product_img, 
+                                product_img = img, 
                                 original_price = original_price, 
                                 sales_price = sales_price, 
                                 discount_rate = discount_rate)
