@@ -42,9 +42,11 @@ class Coupang:
             # Check if we have any product names that matched
             if not contains_name:
                 print("No products found matching the search criteria.")
+                driver.close()
                 return ProductInfo(
                     product_id=product_id,
                     site=site,
+                    product_link=product_link,
                     product_img=product_img,
                     original_price=original_price,
                     sales_price=sales_price,
@@ -88,6 +90,7 @@ class Coupang:
                 product_id=product_id,
                 site=site,
                 product_link=product_link,
+                product_img=product_img,
                 original_price=original_price,
                 sales_price=sales_price,
                 discount_rate=discount_rate
