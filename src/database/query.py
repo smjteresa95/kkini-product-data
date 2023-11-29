@@ -95,17 +95,19 @@ update_filter_query = """
 """
 
 #ProductInfo table
+#product_id 와 site의 조합을 고유하게 만드는 복합키를 생성한다.
 create_product_info_table_query = """
     CREATE TABLE IF NOT EXISTS product_info(
-        product_id BIGINT UNIQUE,
-        site VARCHAR(255),
+        product_id BIGINT NOT NULL
+        site VARCHAR(255) NOT NULL,
         product_link VARCHAR(255),
         product_img VARCHAR(255),
         original_price INT,
         sales_price INT,
         discount_rate INT,
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        UNIQUE KEY product_id_site_unique (product_id, site)
     )
 """
 
@@ -113,20 +115,8 @@ update_product_info_query = """
     INSERT INTO product_info (product_id, site, product_link, product_img, original_price, sales_price, discount_rate, created_at, updated_at)
     VALUES (%s, %s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     ON DUPLICATE KEY UPDATE
-        site = VALUES(site),
         product_link = VALUES(product_link),
         product_img = VALUES(product_img),
-        original_price = VALUES(original_price),
-        sales_price = VALUES(sales_price),
-        discount_rate = VALUES(discount_rate),
-        created_at = CURRENT_TIMESTAMP,
-        updated_at = CURRENT_TIMESTAMP
-"""
-
-update_price_query = """
-    INSERT INTO product_info (product_id, original_price, sales_price, discount_rate, created_at, updated_at)
-    VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-    ON DUPLICATE KEY UPDATE
         original_price = VALUES(original_price),
         sales_price = VALUES(sales_price),
         discount_rate = VALUES(discount_rate),
