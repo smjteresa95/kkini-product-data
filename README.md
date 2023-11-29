@@ -20,7 +20,7 @@ Batch size를 정해 특정 갯수의 상품정보를 각가의 웹사이트에�
 
 ## Setup
 
-<img src="src/util/image/package.png>
+<img src="src/util/image/package.png">
 
 **.env 파일**
 환경변수 설정을 위한 .env 파일을 생성해서 값을 넣어줘야 한다. 
