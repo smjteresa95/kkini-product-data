@@ -6,8 +6,8 @@ from src.config.s3_config import S3_CONFIG
 
 class ImageSaver:
 
-    bucket_name = 'kkini-image-bucket'
-    folder_name = 'product-image'
+    bucket_name = S3_CONFIG['bucket_name']
+    folder_name = S3_CONFIG['folder_name']
 
     # AWS
     # s3 = boto3.client(

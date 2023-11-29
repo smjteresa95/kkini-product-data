@@ -7,8 +7,6 @@ from src.database.query import update_product_from_public_data_query, create_pro
 from src.product.get_nutri_data import GetNutriData as nd
 from src.productfilter.cal_nutri_filter import CalNutriFilter as nf
 
-from src.product.save_product_image import SaveProductImage 
-
 class SaveProduct:
 
     @classmethod
