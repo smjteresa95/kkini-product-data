@@ -98,7 +98,7 @@ update_filter_query = """
 #product_id 와 site의 조합을 고유하게 만드는 복합키를 생성한다.
 create_product_info_table_query = """
     CREATE TABLE IF NOT EXISTS product_info(
-        product_id BIGINT NOT NULL
+        product_id BIGINT NOT NULL,
         site VARCHAR(255) NOT NULL,
         product_link VARCHAR(255),
         product_img VARCHAR(255),

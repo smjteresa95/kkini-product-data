@@ -35,6 +35,18 @@ class WebScraper(BaseCrawler):
                 else: 0
         return 0
             
+    @classmethod
+    def create_product_info_table(cls):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        try:
+            cur.execute(create_product_info_table_query)
+        except pymysql.Error as error:
+            print(f'{error}')
+        finally:
+            cur.close
+            conn.close()
+
 
     @staticmethod
     def get_image_from_naver(product_to_search):
@@ -52,8 +64,11 @@ class WebScraper(BaseCrawler):
     @classmethod    
     def get_data_from_site(cls):
 
+        #초기에 product_info 테이블 생성
+        cls.create_product_info_table()
+
         data_list = nd.fetch_json_data_from_file()
-        BATCH_SIZE = 5
+        BATCH_SIZE = 2
 
         # data_list의 전체길이를 BATCH_SIZE로 나누어 몇개의 batch로 나눌 수 있는지 계산한다. 
         # 사실상 데이터의 총 갯수가 5만개이므로 BATCH_SIZE가 10인 경우 total_batches 는 5천이다. 
