@@ -19,7 +19,8 @@
 
 ## 기능설명
 
-**테이블 구조**
+**테이블 구조**    
+
 <img src="src/util/image/db schema.png">     
 
 1. **product 테이블** [src/product/parse_data.py]     
