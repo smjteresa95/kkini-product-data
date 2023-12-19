@@ -20,7 +20,7 @@
 ## 기능설명
 
 **테이블 구조**
-<img src="src/util/image/db_table.png">     
+<img src="src/util/image/db table.png">     
 
 1. **product 테이블** [src/product/parse_data.py]     
 json 파일에 담겨있는 5만건의 식품 데이터를 parsing 하는 동시에 is_green, nut_score 계산하여 DB에 Bulk insert.   
